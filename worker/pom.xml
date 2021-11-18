@@ -10,6 +10,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>worker</artifactId>
+    <packaging>jar</packaging>
+    <name>worker</name>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
