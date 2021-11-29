@@ -1,4 +1,4 @@
-package org.geniprojects.passwordcraker.worker;
+package org.geniprojects.passwordcracker.worker;
 
 import com.esotericsoftware.kryo.Kryo;
 

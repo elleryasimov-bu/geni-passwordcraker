@@ -1,9 +1,8 @@
-package org.geniprojects.passwordcraker.worker;
+package org.geniprojects.passwordcracker.worker;
 
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
