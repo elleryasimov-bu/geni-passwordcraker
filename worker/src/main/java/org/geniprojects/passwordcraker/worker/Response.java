@@ -1,17 +1,15 @@
 package org.geniprojects.passwordcraker.worker;
 
-public class Response {
-    private String deCryptedString;
+import java.io.Serializable;
+
+public class Response implements Serializable {
+    public String deCryptedString;
+
+    public Response() {
+        this.deCryptedString = "";
+    }
 
     public Response(String deCryptedString) {
-        this.deCryptedString = deCryptedString;
-    }
-
-    public String getDeCryptedString() {
-        return deCryptedString;
-    }
-
-    public void setDeCryptedString(String deCryptedString) {
         this.deCryptedString = deCryptedString;
     }
 }

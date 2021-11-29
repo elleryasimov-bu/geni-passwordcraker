@@ -8,6 +8,8 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.DecoderResult;
 import io.netty.handler.codec.http.*;
 import io.netty.util.CharsetUtil;
+import org.geniprojects.passwordcracker.master.workers.interaction.Request;
+import org.geniprojects.passwordcracker.master.workers.management.ManagementUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -77,6 +79,14 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<Object> {
             if (content.isReadable()) {
                 buf.append("CONTENT: ");
                 buf.append(content.toString(CharsetUtil.UTF_8));
+                buf.append("\r\n");
+                buf.append("RESULT: ");
+                try {
+                    buf.append(ManagementUtil.workerPool.getWorker().assign(new Request(content.toString(CharsetUtil.UTF_8))).deCryptedString);
+                } catch (Exception e) {
+                    //System.out.println();
+                    buf.append("Failed");
+                }
                 buf.append("\r\n");
                 appendDecoderResult(buf, request);
             }

@@ -1,17 +1,16 @@
 package org.geniprojects.passwordcraker.worker;
 
-public class Request {
-    private String enCryptedString;
+import java.io.Serializable;
 
+public class Request implements Serializable {
+    public String enCryptedString;
+
+    public Request() {
+        this.enCryptedString = "";
+    }
     public Request(String enCryptedString) {
         this.enCryptedString = enCryptedString;
     }
 
-    public String getEnCryptedString() {
-        return enCryptedString;
-    }
 
-    public void setEnCryptedString(String enCryptedString) {
-        this.enCryptedString = enCryptedString;
-    }
 }

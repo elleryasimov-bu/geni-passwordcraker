@@ -1,7 +1,9 @@
 package org.geniprojects.passwordcraker.worker;
 
 import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -21,12 +23,23 @@ public class WorkerLogic {
 
             // takes input from the client socket
             Input input = new Input(socket.getInputStream());
+            System.out.println("Get Input");
+            Request req = Util.serializer.readObject(input, Request.class);
 
-            String line = "";
+            System.out.println("Successfully Read " + req.enCryptedString);
+
+
+            Response resp = new Response(decrypt(req.enCryptedString));
+            Output output = new Output(socket.getOutputStream());
+            System.out.println("Going to write");
+            Util.serializer.writeObject(output, resp);
+            output.flush();
+
 
             // close connection
-            socket.close();
             input.close();
+            output.close();
+            socket.close();
         }
         catch(IOException i)
         {
