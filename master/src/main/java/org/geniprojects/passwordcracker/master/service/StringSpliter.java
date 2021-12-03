@@ -1,4 +1,6 @@
-import java.security.*; 
+package org.geniprojects.passwordcracker.master.service;
+
+import java.security.*;
 import java.math.*;
 
 public class StringSpliter {  
