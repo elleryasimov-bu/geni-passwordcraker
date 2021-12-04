@@ -28,7 +28,7 @@ public class WorkerLogic {
             System.out.println("Successfully Read " + req.enCryptedString);
 
 
-            Response resp = new Response(decrypt(req.enCryptedString));
+            Response resp = new Response(decrypt(req.enCryptedString, req.leftBound, req.rightBound));
             Output output = new Output(socket.getOutputStream());
             System.out.println("Going to write");
             Util.serializer.writeObject(output, resp);
@@ -46,7 +46,7 @@ public class WorkerLogic {
         }
     }
 
-    public static String decrypt(String input) {
+    public static String decrypt(String input, String leftBound, String rightBound) {
         return input;
     }
 }
