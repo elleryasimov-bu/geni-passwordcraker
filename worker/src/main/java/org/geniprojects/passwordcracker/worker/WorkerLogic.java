@@ -4,8 +4,11 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class WorkerLogic {
     public static void main(String[] args) {
@@ -40,13 +43,40 @@ public class WorkerLogic {
             output.close();
             socket.close();
         }
-        catch(IOException i)
+        catch(IOException | NoSuchAlgorithmException i)
         {
             System.out.println(i);
         }
     }
 
-    public static String decrypt(String input, String leftBound, String rightBound) {
-        return input;
+    public static String decrypt(String input, char[] leftBound, char[] rightBound) throws NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        StringBuilder testpsw = new StringBuilder();
+        for (char c1 = leftBound[0]; c1 <= rightBound[0]; c1++) {
+            testpsw.append(c1);
+            for (char c2 = leftBound[1]; c2 <= rightBound[1]; c2++) {
+                testpsw.append(c2);
+                for (char c3 = leftBound[2]; c3 <= rightBound[2]; c3++) {
+                    testpsw.append(c3);
+                    for (char c4 = leftBound[3]; c4 <= rightBound[3]; c4++) {
+                        testpsw.append(c4);
+                        for (char c5 = leftBound[4]; c5 <= rightBound[4]; c5++) {
+                            testpsw.append(c5);
+                            md.update(testpsw.toString().getBytes());
+                            String hash = new BigInteger(1, md.digest()).toString(16);
+                            if (input.equals(hash)) {
+                                return testpsw.toString();
+                            }
+                            testpsw.deleteCharAt(4);
+                        }
+                        testpsw.deleteCharAt(3);
+                    }
+                    testpsw.deleteCharAt(2);
+                }
+                testpsw.deleteCharAt(1);
+            }
+            testpsw.deleteCharAt(0);
+        }
+        return "";
     }
 }
