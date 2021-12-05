@@ -8,6 +8,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.DecoderResult;
 import io.netty.handler.codec.http.*;
 import io.netty.util.CharsetUtil;
+import org.geniprojects.passwordcracker.master.service.ResourceRetriever;
 import org.geniprojects.passwordcracker.master.workers.interaction.Request;
 import org.geniprojects.passwordcracker.master.workers.management.ManagementUtil;
 
@@ -47,29 +48,38 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<Object> {
             buf.append("HOSTNAME: ").append(HttpHeaders.getHost(request, "unknown")).append("\r\n");
             buf.append("REQUEST_URI: ").append(request.getUri()).append("\r\n\r\n");*/
 
-            URI uriFromRequest = URI.create(request.uri());
-            if (uriFromRequest.getRawQuery().equals("")) {
-                if (uriFromRequest.getPath().equals("") || uriFromRequest.getPath().equals(ServerUtil.DEFAULT_PAGE_URL)) {
+            //Serve Requests
+            if (request.method() == HttpMethod.GET) {
+                URI uriFromRequest = URI.create(request.uri());
+                if (uriFromRequest.getQuery() == null) {
+                    if (uriFromRequest.getPath() == null || uriFromRequest.getPath().equals("") || uriFromRequest.getPath().equals(ServerUtil.DEFAULT_PAGE_URL)) {
+                        String htmlText = ResourceRetriever.retrieveResourceText(uriFromRequest.getPath());
+                        buf.append(htmlText);
+                    } else {
 
+                    }
                 } else {
-
+                    String queryString = uriFromRequest.getQuery();
+                    Map<String, String> queries = ServerUtil.parseQueryString(queryString);
                 }
             } else {
+                // 404 not found
 
             }
 
 
 
 
-            HttpHeaders headers = request.headers();
-            if (!headers.isEmpty()) {
-                for (Map.Entry<String, String> h: headers) {
-                    String key = h.getKey();
-                    String value = h.getValue();
-                    buf.append("HEADER: ").append(key).append(" = ").append(value).append("\r\n");
-                }
-                buf.append("\r\n");
-            }
+
+//            HttpHeaders headers = request.headers();
+//            if (!headers.isEmpty()) {
+//                for (Map.Entry<String, String> h: headers) {
+//                    String key = h.getKey();
+//                    String value = h.getValue();
+//                    buf.append("HEADER: ").append(key).append(" = ").append(value).append("\r\n");
+//                }
+//                buf.append("\r\n");
+//            }
 
             //getUri
             QueryStringDecoder queryStringDecoder = new QueryStringDecoder(request.getUri());
