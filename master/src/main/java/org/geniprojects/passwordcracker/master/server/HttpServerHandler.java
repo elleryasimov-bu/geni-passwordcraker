@@ -52,7 +52,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<Object> {
                 URI uriFromRequest = URI.create(request.uri());
                 if (uriFromRequest.getQuery() == null) {
                     contentType = "text/html";
-                    if (uriFromRequest.getPath() == null || uriFromRequest.getPath().equals("") || uriFromRequest.getPath().equals(ServerUtil.DEFAULT_PAGE_URL)) {
+                    if (uriFromRequest.getPath() == null || uriFromRequest.getPath().equals("/") || uriFromRequest.getPath().equals(ServerUtil.DEFAULT_PAGE_URL)) {
                         String htmlText = ResourceRetriever.retrieveResourceText(ServerUtil.DEFAULT_PAGE_URL);
                         contentBuf.append(htmlText);
                         responseStatus = OK;
@@ -78,15 +78,14 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<Object> {
                 responseStatus = NOT_FOUND;
             }
 
-            if (msg instanceof LastHttpContent) {
+                System.out.println("Going to write");
 
-                LastHttpContent trailer = (LastHttpContent) msg;
+                //LastHttpContent trailer = (LastHttpContent) msg;
 
-                if (!writeResponse(trailer, ctx)) {
+                if (!writeResponse(ctx)) {
                     // If keep-alive is off, close the connection once the content is fully written.
                     ctx.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
                 }
-            }
         }
     }
 
@@ -97,7 +96,8 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<Object> {
         }
     }
 
-    private boolean writeResponse(HttpObject currentObj, ChannelHandlerContext ctx) {
+    private boolean writeResponse(ChannelHandlerContext ctx) {
+        System.out.println("writeResponse called");
         // Decide whether to close the connection or not.
         boolean keepAlive = HttpHeaders.isKeepAlive(request);
         // Build the response object.
