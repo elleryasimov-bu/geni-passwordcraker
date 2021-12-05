@@ -11,6 +11,7 @@ import io.netty.util.CharsetUtil;
 import org.geniprojects.passwordcracker.master.workers.interaction.Request;
 import org.geniprojects.passwordcracker.master.workers.management.ManagementUtil;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -39,12 +40,26 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<Object> {
             }
 
             buf.setLength(0);
-            buf.append("WELCOME TO THE WILD WILD WEB SERVER\r\n");
+            /*buf.append("WELCOME TO THE WILD WILD WEB SERVER\r\n");
             buf.append("===================================\r\n");
 
             buf.append("VERSION: ").append(request.getProtocolVersion()).append("\r\n");
             buf.append("HOSTNAME: ").append(HttpHeaders.getHost(request, "unknown")).append("\r\n");
-            buf.append("REQUEST_URI: ").append(request.getUri()).append("\r\n\r\n");
+            buf.append("REQUEST_URI: ").append(request.getUri()).append("\r\n\r\n");*/
+
+            URI uriFromRequest = URI.create(request.uri());
+            if (uriFromRequest.getRawQuery().equals("")) {
+                if (uriFromRequest.getPath().equals("") || uriFromRequest.getPath().equals(ServerUtil.DEFAULT_PAGE_URL)) {
+
+                } else {
+
+                }
+            } else {
+
+            }
+
+
+
 
             HttpHeaders headers = request.headers();
             if (!headers.isEmpty()) {
@@ -56,7 +71,9 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<Object> {
                 buf.append("\r\n");
             }
 
+            //getUri
             QueryStringDecoder queryStringDecoder = new QueryStringDecoder(request.getUri());
+
             Map<String, List<String>> params = queryStringDecoder.parameters();
             if (!params.isEmpty()) {
                 for (Map.Entry<String, List<String>> p: params.entrySet()) {
@@ -82,7 +99,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<Object> {
                 buf.append("\r\n");
                 buf.append("RESULT: ");
                 try {
-                    buf.append(ManagementUtil.workerPool.getWorker().assign(new Request(content.toString(CharsetUtil.UTF_8))).deCryptedString);
+                    buf.append(ManagementUtil.workerPool.getWorker().assign(new Request(content.toString(CharsetUtil.UTF_8), "AAAAA", "ZZZZZ")).deCryptedString);
                 } catch (Exception e) {
                     //System.out.println();
                     buf.append("Failed");

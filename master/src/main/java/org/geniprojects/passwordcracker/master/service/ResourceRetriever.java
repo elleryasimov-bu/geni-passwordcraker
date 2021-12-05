@@ -4,7 +4,7 @@ import java.io.File;
 
 public class ResourceRetriever {
 
-    public File retrieveResource(String path) {
+    public static File retrieveResource(String path) {
         return null;
     }
 }
