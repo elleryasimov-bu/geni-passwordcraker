@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import java.io.File;
 
+import java.net.URL;
 import java.nio.file.Files;
 
 import java.nio.file.Path;
@@ -25,9 +26,12 @@ public class ResourceRetriever {
         String content = "";
 
         try {
-            content = new String(Files.readAllBytes(Paths.get(path)));
-        } catch (IOException e) {
+            //content = new String(Files.readAllBytes(Paths.get(path)));
+            URL url  = ResourceRetriever.class.getResource(path);
+            content = new String(Files.readAllBytes(Paths.get(url.toURI())));
+        } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
 
         return content;
@@ -36,6 +40,6 @@ public class ResourceRetriever {
     public static void main(String args[]) throws IOException {
         String filePath = "C:/Users/Zimou Sun/Desktop/laioffer.txt";
 
-        System.out.println(retrieveResourceText(filePath));
+        System.out.println(retrieveResourceText("/client.html"));
     }
 }

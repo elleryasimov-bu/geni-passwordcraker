@@ -7,6 +7,7 @@ import java.util.Map;
 public class ServerUtil {
 
     public static String DEFAULT_PAGE_URL = "/client.html";
+    public static String FIELD_NAME = "encryptedString";
 
     public static Map<String, String> parseQueryString(String queryString) {
         Map<String, String> query_pairs = new LinkedHashMap<String, String>();
