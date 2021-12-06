@@ -11,6 +11,7 @@ import java.net.Socket;
 public class Worker {
     private String ipAddress;
     private int port;
+    private Socket socket;
 
     public Worker(String ipAddress, int port) {
         this.ipAddress = ipAddress;
