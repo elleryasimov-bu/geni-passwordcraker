@@ -13,6 +13,11 @@ public class WorkerPool {
         workers = new ArrayList<>();
     }
 
+    public void loadWorkersFromJsonFile(String path) {
+
+
+    }
+
 
     public void addWorker(Worker worker) {
         workers.add(worker);

@@ -52,7 +52,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<Object> {
                 URI uriFromRequest = URI.create(request.uri());
                 if (uriFromRequest.getQuery() == null) {
                     contentType = "text/html";
-                    if (uriFromRequest.getPath() == null || uriFromRequest.getPath().equals("/") || uriFromRequest.getPath().equals(ServerUtil.DEFAULT_PAGE_URL)) {
+                    if (uriFromRequest.getPath() == null || uriFromRequest.getPath().equals("/") || uriFromRequest.getPath().equals("") ||uriFromRequest.getPath().equals(ServerUtil.DEFAULT_PAGE_URL)) {
                         String htmlText = ResourceRetriever.retrieveResourceText(ServerUtil.DEFAULT_PAGE_URL);
                         contentBuf.append(htmlText);
                         responseStatus = OK;
@@ -70,7 +70,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<Object> {
                     QueryStringDecoder queryStringDecoder = new QueryStringDecoder(request.getUri());
                     Map<String, List<String>> params = queryStringDecoder.parameters();
                     if (!params.isEmpty()) {
-                        String decryptedString = Md5DecryptingController.decrypt(params.get(ServerUtil.FIELD_NAME).get(0));
+                        String decryptedString = Md5DecryptingController.serve(params.get(ServerUtil.FIELD_NAME).get(0));
                         contentBuf.append(decryptedString);
                     }
                 }

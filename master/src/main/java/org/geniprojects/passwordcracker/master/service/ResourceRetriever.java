@@ -1,14 +1,16 @@
 package org.geniprojects.passwordcracker.master.service;
 
-import java.io.IOException;
+import org.geniprojects.passwordcracker.master.workers.management.WorkerPool;
 
-import java.io.File;
+import java.io.*;
 
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.stream.Collectors;
 
 public class ResourceRetriever {
 
@@ -25,20 +27,19 @@ public class ResourceRetriever {
     public static String retrieveResourceText(String path) {
         String content = "";
 
-        try {
-            //content = new String(Files.readAllBytes(Paths.get(path)));
-            URL url  = ResourceRetriever.class.getResource(path);
-            content = new String(Files.readAllBytes(Paths.get(url.toURI())));
+        try (InputStream in = ResourceRetriever.class.getResourceAsStream(path)) {
+            content = new BufferedReader(
+                    new InputStreamReader(in, StandardCharsets.UTF_8))
+                    .lines()
+                    .collect(Collectors.joining("\n"));
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
-
         return content;
     }
 
     public static void main(String args[]) throws IOException {
-        String filePath = "C:/Users/Zimou Sun/Desktop/laioffer.txt";
 
         System.out.println(retrieveResourceText("/client.html"));
     }
