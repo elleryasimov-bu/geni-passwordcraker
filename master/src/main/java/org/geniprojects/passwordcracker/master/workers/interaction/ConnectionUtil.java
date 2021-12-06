@@ -9,6 +9,7 @@ public class ConnectionUtil {
         Kryo newSerialzier = new Kryo();
         newSerialzier.register(Request.class);
         newSerialzier.register(Response.class);
+        newSerialzier.register(char[].class);
         return  newSerialzier;
     }
 

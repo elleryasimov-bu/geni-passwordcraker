@@ -8,6 +8,7 @@ public class Util {
         Kryo kryo = new Kryo();
         kryo.register(Request.class);
         kryo.register(Response.class);
+        kryo.register(char[].class);
         return kryo;
     }
 }

@@ -27,7 +27,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<Object> {
     /** Buffer that stores the response content */
     private final StringBuilder headerBuf = new StringBuilder();
     private final StringBuilder contentBuf = new StringBuilder();
-    private HttpResponseStatus responseStatus = null;
+    private HttpResponseStatus responseStatus = OK;
     private String contentType = "text/plain";
 
     @Override
@@ -66,6 +66,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<Object> {
                         }
                     }
                 } else {
+                    responseStatus = OK;
                     contentType = "text/plain";
                     QueryStringDecoder queryStringDecoder = new QueryStringDecoder(request.getUri());
                     Map<String, List<String>> params = queryStringDecoder.parameters();
