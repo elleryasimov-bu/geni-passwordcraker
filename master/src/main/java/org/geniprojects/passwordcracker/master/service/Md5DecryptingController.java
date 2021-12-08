@@ -1,6 +1,6 @@
 package org.geniprojects.passwordcracker.master.service;
 
-import org.geniprojects.passwordcracker.master.workers.interaction.Request;
+import org.geniprojects.passwordcracker.master.utils.Request;
 import org.geniprojects.passwordcracker.master.workers.management.ManagementUtil;
 import org.geniprojects.passwordcracker.master.workers.management.WorkerPool;
 

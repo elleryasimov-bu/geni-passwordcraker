@@ -1,4 +1,4 @@
-package org.geniprojects.passwordcracker.master.workers.interaction;
+package org.geniprojects.passwordcracker.master.utils;
 
 import java.io.Serializable;
 

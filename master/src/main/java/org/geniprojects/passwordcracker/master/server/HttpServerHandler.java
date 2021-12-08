@@ -1,6 +1,5 @@
 package org.geniprojects.passwordcracker.master.server;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
@@ -10,13 +9,10 @@ import io.netty.handler.codec.http.*;
 import io.netty.util.CharsetUtil;
 import org.geniprojects.passwordcracker.master.service.Md5DecryptingController;
 import org.geniprojects.passwordcracker.master.service.ResourceRetriever;
-import org.geniprojects.passwordcracker.master.workers.interaction.Request;
-import org.geniprojects.passwordcracker.master.workers.management.ManagementUtil;
 
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static io.netty.handler.codec.http.HttpHeaders.Names.*;
 import static io.netty.handler.codec.http.HttpResponseStatus.*;

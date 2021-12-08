@@ -1,4 +1,4 @@
-package org.geniprojects.passwordcracker.master.service;
+package org.geniprojects.passwordcracker.master.utils;
 
 public class Range {
     public String leftBound;

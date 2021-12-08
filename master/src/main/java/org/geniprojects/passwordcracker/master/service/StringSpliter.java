@@ -1,12 +1,12 @@
 package org.geniprojects.passwordcracker.master.service;
 
-import java.security.*;
-import java.math.*;
+import org.geniprojects.passwordcracker.master.utils.Range;
+
 import java.util.ArrayList;
 
 public class StringSpliter {
 
-   public static ArrayList<Range> splitStrforWorkers(int workerNum,String inputString)throws Exception
+   public static ArrayList<Range> splitStrforWorkers(int workerNum, String inputString)throws Exception
    {
       String rangeStr =inputString;
 
