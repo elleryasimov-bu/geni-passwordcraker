@@ -7,17 +7,19 @@ public class Request implements Serializable {
     public String enCryptedString;
     public char[] leftBound;
     public char[] rightBound;
-    public long id;
+    public int majorId;
+    public long minorId;
 
     public Request() {
         this.enCryptedString = "";
-        this.id = (new Date()).getTime();
+        this.minorId = (new Date()).getTime();
     }
 
-    public Request(String enCryptedString, String leftBound, String rightBound) {
+    public Request(int majorId, String enCryptedString, String leftBound, String rightBound) {
         this.enCryptedString = enCryptedString;
         this.leftBound = leftBound.toCharArray();
         this.rightBound = rightBound.toCharArray();
-        this.id = (new Date()).getTime();
+        this.minorId = (new Date()).getTime();
+        this.majorId = majorId;
     }
 }

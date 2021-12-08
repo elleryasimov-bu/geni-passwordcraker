@@ -9,7 +9,7 @@ public class Md5DecryptingController {
 
     public static String serve(String encryptedString) {
         try {
-            return ManagementUtil.workerPool.getWorker().assign(new Request(encryptedString, "AAAAA", "ZZZZZ")).deCryptedString;
+            return ManagementUtil.workerPool.getWorker().assign(new Request(0, encryptedString, "AAAAA", "ZZZZZ")).deCryptedString;
         } catch (Exception e) {
             e.printStackTrace();
             return "";
