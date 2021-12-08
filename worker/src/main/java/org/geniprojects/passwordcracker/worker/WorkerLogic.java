@@ -36,8 +36,6 @@ public class WorkerLogic {
                 System.out.println("Going to write");
                 Util.serializer.writeObject(output, resp);
                 output.flush();
-                input.close();
-                output.close();
             }
 
             // close connection
