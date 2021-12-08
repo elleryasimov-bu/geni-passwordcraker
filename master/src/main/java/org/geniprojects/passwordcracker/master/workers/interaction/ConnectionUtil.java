@@ -6,6 +6,7 @@ import org.geniprojects.passwordcracker.master.utils.Response;
 
 public class ConnectionUtil {
     public static final Kryo serializer = initSerializer();
+    public static final Kryo inputSerializer = initSerializer();
 
     private static Kryo initSerializer() {
         Kryo newSerialzier = new Kryo();

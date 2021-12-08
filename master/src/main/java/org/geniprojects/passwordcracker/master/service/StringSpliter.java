@@ -3,12 +3,15 @@ package org.geniprojects.passwordcracker.master.service;
 import org.geniprojects.passwordcracker.master.utils.Range;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class StringSpliter {
 
-   public static ArrayList<Range> splitStrforWorkers(int workerNum)throws Exception
+   public static ArrayList<Range> splitStrforWorkers(int workerNum)
    {
-      String rangeStr ="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      if (workerNum == 0) return null;
+
+      String rangeStr ="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
       int numOfWorker=workerNum;
 
@@ -54,6 +57,13 @@ public class StringSpliter {
 
       }
       return workDistributionRange;
+   }
+
+   public static void main(String[] args) {
+      List<Range> list = splitStrforWorkers(3);
+      for (Range range: list) {
+         System.out.println(range.leftBound.toString() + " " + range.rightBound.toString());
+      }
    }
 
 

@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class Response implements Serializable {
     public String deCryptedString;
-    public long id;
+    public int id;
 
     public Response() {
         this.deCryptedString = "";
@@ -14,7 +14,7 @@ public class Response implements Serializable {
         this.deCryptedString = deCryptedString;
     }
 
-    public Response(String deCryptedString, long id) {
+    public Response(String deCryptedString, int id) {
         this.deCryptedString = deCryptedString;
         this.id = id;
     }

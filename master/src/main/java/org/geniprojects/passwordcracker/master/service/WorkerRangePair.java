@@ -7,8 +7,8 @@ import java.util.ArrayList;
 
 public class WorkerRangePair {
     public Worker worker;
-    public ArrayList<Range> defaultRange;
-    public WorkerRangePair(Worker w,ArrayList<Range> r)
+    public Range defaultRange;
+    public WorkerRangePair(Worker w,Range r)
     {
         this.worker=w;
         this.defaultRange=r;

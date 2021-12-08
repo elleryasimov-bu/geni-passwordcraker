@@ -7,9 +7,10 @@ public class Range {
         leftBound = "";
         rightBound = "";
     }
-    public Range(String leftBound, String rightBound) throws Exception{
+    public Range(String leftBound, String rightBound){
         if (leftBound.compareTo(rightBound) > 0) {
-            throw new Exception("left > right");
+            this.leftBound = rightBound;
+            this.rightBound = leftBound;
         } else {
             this.leftBound = leftBound;
             this.rightBound = rightBound;

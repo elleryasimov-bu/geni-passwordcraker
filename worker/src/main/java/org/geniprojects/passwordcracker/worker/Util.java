@@ -2,6 +2,9 @@ package org.geniprojects.passwordcracker.worker;
 
 import com.esotericsoftware.kryo.Kryo;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class Util {
     public static final Kryo serializer = initSerializer();
     private static Kryo initSerializer() {
@@ -11,4 +14,5 @@ public class Util {
         kryo.register(char[].class);
         return kryo;
     }
+    public static final ExecutorService connThreadPool = Executors.newCachedThreadPool();
 }

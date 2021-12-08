@@ -10,7 +10,9 @@ import org.geniprojects.passwordcracker.master.utils.Response;
 import org.geniprojects.passwordcracker.master.workers.management.ManagementUtil;
 import org.geniprojects.passwordcracker.master.workers.management.WorkerPool;
 
+import java.io.OutputStream;
 import java.net.Socket;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Worker {
@@ -19,9 +21,11 @@ public class Worker {
     private Socket socket;
     private WorkerPool workerPool;
     public int id;
-    public AtomicBoolean availability;
+    public AtomicBoolean availability = new AtomicBoolean();
     private Worker previousWorker;
     private Thread receivingThread;
+    //private Output output;
+    //private Input input;
 
     public Worker(String ipAddress, int port) {
         this.ipAddress = ipAddress;
@@ -53,11 +57,14 @@ public class Worker {
     }
 
     public synchronized boolean asyncAssign(Request req){
-        if (!availability.get()) return false;
+        //if (!availability.get()) return false;
         try {
-            if (!socket.isConnected() || socket.isClosed()) {
+            if (socket == null) {
                 socket = new Socket(ipAddress, port);
+                //output = new Output(socket.getOutputStream());
+                //input = new Input(socket.getInputStream());
                 ManagementUtil.backgroundThreadPool.submit(this::runReceiver);
+                availability.set(true);
             }
 
             Output output = new Output(socket.getOutputStream());
@@ -65,7 +72,7 @@ public class Worker {
             ConnectionUtil.serializer.writeObject(output, req);
             System.out.println("Going to send " + req.enCryptedString);
             output.flush();
-            output.close();
+            //output.close();
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -74,22 +81,39 @@ public class Worker {
     }
 
     public void runReceiver() {
+        //Input input;
+        //Input input = null;
         try {
             System.out.println("Waiting for input");
-            Input input = new Input(socket.getInputStream());
-            Response resp = ConnectionUtil.serializer.readObject(input, Response.class);
-            System.out.println("Response received");
-            // TODO: publish response to some place.
-            ServiceUtil.md5DecryptExecutor.queueCatalog.get(resp.id).put(resp.deCryptedString);
+            //input = new Input(socket.getInputStream());
+            while (true) {
+                Input input = new Input(socket.getInputStream());
+                Response resp = ConnectionUtil.inputSerializer.readObject(input, Response.class);
+                //input.close();
+                System.out.println("Response received: " + resp.id);
+                // Fix: Not thread-safe.
+                BlockingQueue<String> assignedQueue = ServiceUtil.md5DecryptExecutor.queueCatalog.get(resp.id);
+                if (assignedQueue != null) {
+                    assignedQueue.put(resp.deCryptedString);
+                }
+            }
         } catch (Exception e) {
             availability.set(false);
-
+        } finally {
+            try {
+                //if (input != null) input.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-
     }
 
     public Worker getSubsituteWorker() {
         return previousWorker;
+    }
+
+    public void setPreviousWorker(Worker worker) {
+        previousWorker = worker;
     }
 
 }

@@ -12,7 +12,8 @@ public class Main {
             port = Integer.parseInt(args[0]);
         }
 
-        ManagementUtil.workerPool.addWorker(new Worker("127.0.0.1", 50000));
+        ManagementUtil.workerPool.addWorker("127.0.0.1", 50000);
+        //ManagementUtil.workerPool.addWorker("127.0.0.1", 50001);
 
         try{
             new HttpServer().run(port);

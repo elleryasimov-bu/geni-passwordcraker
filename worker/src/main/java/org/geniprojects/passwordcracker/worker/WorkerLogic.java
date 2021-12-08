@@ -21,31 +21,33 @@ public class WorkerLogic {
             System.out.println("Waiting for a client ...");
 
             Socket socket = server.accept();
+            Util.connThreadPool.submit(new PerConnection(socket));
             System.out.println("Client accepted");
 
-            // takes input from the client socket
-            Input input = new Input(socket.getInputStream());
-            System.out.println("Get Input");
-            Request req = Util.serializer.readObject(input, Request.class);
-
-            System.out.println("Successfully Read " + req.enCryptedString);
-
-
-            Response resp = new Response(decrypt(req.enCryptedString, req.leftBound, req.rightBound));
-            Output output = new Output(socket.getOutputStream());
-            System.out.println("Going to write");
-            Util.serializer.writeObject(output, resp);
-            output.flush();
-
-
-            // close connection
-            input.close();
-            output.close();
-            socket.close();
+//            // takes input from the client socket
+//            Input input = new Input(socket.getInputStream());
+//            System.out.println("Get Input");
+//            Request req = Util.serializer.readObject(input, Request.class);
+//
+//            System.out.println("Successfully Read " + req.enCryptedString);
+//
+//
+//            Response resp = new Response(decrypt(req.enCryptedString, req.leftBound, req.rightBound));
+//            Output output = new Output(socket.getOutputStream());
+//            System.out.println("Going to write");
+//            Util.serializer.writeObject(output, resp);
+//            output.flush();
+//
+//
+//            // close connection
+//            input.close();
+//            output.close();
+            //socket.close();
         }
-        catch(IOException | NoSuchAlgorithmException i)
+        catch(IOException e)
         {
-            System.out.println(i);
+            //System.out.println(i);
+            e.printStackTrace();
         }
     }
 

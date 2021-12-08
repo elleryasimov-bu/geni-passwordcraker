@@ -6,7 +6,8 @@ public class Request implements Serializable {
     public String enCryptedString;
     public char[] leftBound;
     public char[] rightBound;
-    public long id;
+    public int majorId;
+    //public long minorId;
 
     public Request() {
         this.enCryptedString = "";

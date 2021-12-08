@@ -21,7 +21,9 @@ import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
 public class HttpServerHandler extends SimpleChannelInboundHandler<Object> {
     private HttpRequest request;
-    /** Buffer that stores the response content */
+    /**
+     * Buffer that stores the response content
+     */
     private final StringBuilder headerBuf = new StringBuilder();
     private final StringBuilder contentBuf = new StringBuilder();
     private HttpResponseStatus responseStatus = OK;
@@ -49,7 +51,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<Object> {
                 URI uriFromRequest = URI.create(request.uri());
                 if (uriFromRequest.getQuery() == null) {
                     contentType = "text/html";
-                    if (uriFromRequest.getPath() == null || uriFromRequest.getPath().equals("/") || uriFromRequest.getPath().equals("") ||uriFromRequest.getPath().equals(ServerUtil.DEFAULT_PAGE_URL)) {
+                    if (uriFromRequest.getPath() == null || uriFromRequest.getPath().equals("/") || uriFromRequest.getPath().equals("") || uriFromRequest.getPath().equals(ServerUtil.DEFAULT_PAGE_URL)) {
                         String htmlText = ResourceRetriever.retrieveResourceText(ServerUtil.DEFAULT_PAGE_URL);
                         contentBuf.append(htmlText);
                         responseStatus = OK;
@@ -77,14 +79,14 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<Object> {
                 responseStatus = NOT_FOUND;
             }
 
-                System.out.println("Going to write");
+            System.out.println("Going to write");
 
-                //LastHttpContent trailer = (LastHttpContent) msg;
+            //LastHttpContent trailer = (LastHttpContent) msg;
 
-                if (!writeResponse(ctx)) {
-                    // If keep-alive is off, close the connection once the content is fully written.
-                    ctx.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
-                }
+            if (!writeResponse(ctx)) {
+                // If keep-alive is off, close the connection once the content is fully written.
+                ctx.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
+            }
         }
     }
 

@@ -14,8 +14,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Md5DecryptingExecutor {
     private WorkerPool workerPool;
-    public ConcurrentHashMap<Integer, BlockingQueue<String>> queueCatalog;
-    private AtomicInteger seqNum;
+    public ConcurrentHashMap<Integer, BlockingQueue<String>> queueCatalog = new ConcurrentHashMap<>();
+    private AtomicInteger seqNum = new AtomicInteger();
 
     public Md5DecryptingExecutor(WorkerPool workerPool) {
         this.workerPool = workerPool;
@@ -30,6 +30,7 @@ public class Md5DecryptingExecutor {
         for (WorkerRangePair pair: workerRangePairs){
             Worker worker = pair.worker;
             Range range = pair.defaultRange;
+            System.out.println("Range = " + range.leftBound.toString() + " " + range.rightBound.toString());
             Request newRequest = new Request(majorId, encryptedString, range.leftBound, range.rightBound);
             ManagementUtil.foregroundThreadPool.submit(() -> {
                 Worker currWorker = worker;
@@ -41,15 +42,23 @@ public class Md5DecryptingExecutor {
         }
 
         BlockingQueue<String> queue = queueCatalog.get(majorId);
+        System.out.println("Receiving majorID = " + majorId);
 
         int n = 0;
 
         while (n < workerRangePairs.size()) {
-            String result = queue.poll();
+            String result = null;
+            try {
+                result = queue.take();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             if (!result.isEmpty()) {
+                System.out.println("Receiving " + result);
                 queueCatalog.remove(majorId);
                 return result;
             }
+            n ++;
         }
 
         queueCatalog.remove(majorId);
