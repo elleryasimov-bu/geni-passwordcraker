@@ -6,9 +6,9 @@ import java.util.ArrayList;
 
 public class StringSpliter {
 
-   public static ArrayList<Range> splitStrforWorkers(int workerNum, String inputString)throws Exception
+   public static ArrayList<Range> splitStrforWorkers(int workerNum)throws Exception
    {
-      String rangeStr =inputString;
+      String rangeStr ="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
       int numOfWorker=workerNum;
 
