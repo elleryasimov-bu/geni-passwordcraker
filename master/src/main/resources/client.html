@@ -2,23 +2,40 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="styles.css">
     <title>Password Cracker</title>
 </head>
 <body>
-<form >
-    <fieldset>
-        <legend>Password Cracker</legend>
+    <div class="header" >
+        <img src="unlock-alt-solid.svg" alt="Bootstrap" width="32" height="32">
+        <h1>Password Cracker</h1>
+    </div>
+    <br>
+    <form action="127.0.0.1:8081" method="get">
         <div class="form-control">
-            <label for="input">Input</label>
-            <input type="input" id="input" placeholder="Enter md5 hash" required />
+            <label for="input">
+                Input
+                <input id="input" placeholder="Enter md5 hash" required minlength="16" maxlength="16"/>
+            </label>
         </div>
 
         <div class="form-control">
-            <label>Result</label>
-            <output name="result" for="input" > </output>
+            <label>
+                Result
+                <output name="result" for="input" > </output>
+            </label>
         </div>
-        <input type="submit" value="Compute" class="submit-btn"/>
-    </fieldset>
-</form>
+        <div>
+            <label>
+                <input type="submit" value="Compute" class="submit-btn"/>
+            </label>
+        </div>
+
+    </form>
+
+    <button type="button" class="btn btn-primary ">Add Worker</button>
+    <button type="button" class="btn btn-secondary ">Remove Worker</button>
+
+
 </body>
 </html>
