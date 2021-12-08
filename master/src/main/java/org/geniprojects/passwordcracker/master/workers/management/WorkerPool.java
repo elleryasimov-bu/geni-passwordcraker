@@ -1,5 +1,6 @@
 package org.geniprojects.passwordcracker.master.workers.management;
 
+import org.geniprojects.passwordcracker.master.service.WorkerRangePair;
 import org.geniprojects.passwordcracker.master.utils.Range;
 import org.geniprojects.passwordcracker.master.workers.Worker;
 
@@ -38,6 +39,10 @@ public class WorkerPool {
     }
 
     public List<Worker> getWorkers(int num) {
+        return null;
+    }
+
+    public List<WorkerRangePair> getWorkerRangePairs() {
         return null;
     }
 
