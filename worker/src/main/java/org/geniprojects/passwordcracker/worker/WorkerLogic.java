@@ -19,10 +19,10 @@ public class WorkerLogic {
             System.out.println("Server started");
 
             System.out.println("Waiting for a client ...");
-
-            Socket socket = server.accept();
-            System.out.println("Client accepted");
             while (true) {
+                Socket socket = server.accept();
+                System.out.println("Client accepted");
+            
                 // takes input from the client socket
                 Input input = new Input(socket.getInputStream());
                 System.out.println("Get Input");
@@ -36,10 +36,11 @@ public class WorkerLogic {
                 System.out.println("Going to write");
                 Util.serializer.writeObject(output, resp);
                 output.flush();
+                socket.close();
             }
 
             // close connection
-            socket.close();
+            
         }
         catch(IOException | NoSuchAlgorithmException i)
         {
