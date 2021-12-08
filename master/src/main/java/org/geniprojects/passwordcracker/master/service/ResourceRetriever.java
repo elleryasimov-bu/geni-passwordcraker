@@ -29,7 +29,7 @@ public class ResourceRetriever {
 
         try (InputStream in = ResourceRetriever.class.getResourceAsStream(path)) {
             content = new BufferedReader(
-                    new InputStreamReader(in, StandardCharsets.UTF_8))
+                    new InputStreamReader(in, StandardCharsets.US_ASCII))
                     .lines()
                     .collect(Collectors.joining("\n"));
         } catch (Exception e) {
@@ -41,6 +41,6 @@ public class ResourceRetriever {
 
     public static void main(String args[]) throws IOException {
 
-        System.out.println(retrieveResourceText("/client.html"));
+        System.out.println(retrieveResourceText("/styles.css"));
     }
 }

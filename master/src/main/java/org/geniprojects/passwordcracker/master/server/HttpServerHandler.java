@@ -56,6 +56,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<Object> {
                         contentBuf.append(htmlText);
                         responseStatus = OK;
                     } else {
+                        System.out.println("Path: " + uriFromRequest.getPath());
                         String htmlText = ResourceRetriever.retrieveResourceText(uriFromRequest.getPath());
                         if (htmlText != null) {
                             contentBuf.append(htmlText);

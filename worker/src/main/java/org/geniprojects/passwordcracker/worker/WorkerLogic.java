@@ -51,6 +51,7 @@ public class WorkerLogic {
     }
 
     public static String decrypt(String input, char[] leftBound, char[] rightBound) throws NoSuchAlgorithmException {
+        System.out.println(input + " " + new String(leftBound) + " " + new String(rightBound));
         MessageDigest md = MessageDigest.getInstance("MD5");
         StringBuilder testpsw = new StringBuilder();
         for (char c1 = leftBound[0]; c1 <= rightBound[0]; c1++) {
@@ -65,6 +66,7 @@ public class WorkerLogic {
                             testpsw.append(c5);
                             md.update(testpsw.toString().getBytes());
                             String hash = new BigInteger(1, md.digest()).toString(16);
+                            if (testpsw.toString().equals("AAAAB")) System.out.println(hash);
                             if (input.equals(hash)) {
                                 return testpsw.toString();
                             }
