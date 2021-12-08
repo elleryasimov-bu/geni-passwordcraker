@@ -6,5 +6,6 @@ import java.util.concurrent.Executors;
 
 public class ManagementUtil {
     public static final ExecutorService backgroundThreadPool = Executors.newCachedThreadPool();
+    public static final ExecutorService foregroundThreadPool = Executors.newCachedThreadPool();
     public static final WorkerPool workerPool = new WorkerPool();
 }

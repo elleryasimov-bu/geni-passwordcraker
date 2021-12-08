@@ -2,6 +2,8 @@ package org.geniprojects.passwordcracker.master.workers;
 
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+import org.geniprojects.passwordcracker.master.server.ServerUtil;
+import org.geniprojects.passwordcracker.master.service.ServiceUtil;
 import org.geniprojects.passwordcracker.master.workers.interaction.ConnectionUtil;
 import org.geniprojects.passwordcracker.master.utils.Request;
 import org.geniprojects.passwordcracker.master.utils.Response;
@@ -9,6 +11,7 @@ import org.geniprojects.passwordcracker.master.workers.management.ManagementUtil
 import org.geniprojects.passwordcracker.master.workers.management.WorkerPool;
 
 import java.net.Socket;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Worker {
     private String ipAddress;
@@ -16,7 +19,7 @@ public class Worker {
     private Socket socket;
     private WorkerPool workerPool;
     public int id;
-    public boolean availability;
+    public AtomicBoolean availability;
     private Worker previousWorker;
     private Thread receivingThread;
 
@@ -49,18 +52,25 @@ public class Worker {
         return resp;
     }
 
-    public synchronized void asyncAssign(Request req) throws Exception {
-        if (!socket.isConnected() || socket.isClosed()) {
-            socket = new Socket(ipAddress, port);
-            ManagementUtil.backgroundThreadPool.submit(this::runReceiver);
-        }
+    public synchronized boolean asyncAssign(Request req){
+        if (!availability.get()) return false;
+        try {
+            if (!socket.isConnected() || socket.isClosed()) {
+                socket = new Socket(ipAddress, port);
+                ManagementUtil.backgroundThreadPool.submit(this::runReceiver);
+            }
 
-        Output output = new Output(socket.getOutputStream());
-        System.out.println("Going to write");
-        ConnectionUtil.serializer.writeObject(output, req);
-        System.out.println("Going to send " + req.enCryptedString);
-        output.flush();
-        output.close();
+            Output output = new Output(socket.getOutputStream());
+            System.out.println("Going to write");
+            ConnectionUtil.serializer.writeObject(output, req);
+            System.out.println("Going to send " + req.enCryptedString);
+            output.flush();
+            output.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     public void runReceiver() {
@@ -70,9 +80,9 @@ public class Worker {
             Response resp = ConnectionUtil.serializer.readObject(input, Response.class);
             System.out.println("Response received");
             // TODO: publish response to some place.
-
+            ServiceUtil.md5DecryptExecutor.queueCatalog.get(resp.id).put(resp.deCryptedString);
         } catch (Exception e) {
-            availability = false;
+            availability.set(false);
 
         }
 

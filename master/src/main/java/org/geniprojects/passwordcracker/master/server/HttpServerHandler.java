@@ -9,6 +9,7 @@ import io.netty.handler.codec.http.*;
 import io.netty.util.CharsetUtil;
 import org.geniprojects.passwordcracker.master.service.Md5DecryptingController;
 import org.geniprojects.passwordcracker.master.service.ResourceRetriever;
+import org.geniprojects.passwordcracker.master.service.ServiceUtil;
 
 import java.net.URI;
 import java.util.List;
@@ -67,7 +68,8 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<Object> {
                     QueryStringDecoder queryStringDecoder = new QueryStringDecoder(request.getUri());
                     Map<String, List<String>> params = queryStringDecoder.parameters();
                     if (!params.isEmpty()) {
-                        String decryptedString = Md5DecryptingController.serve(params.get(ServerUtil.FIELD_NAME).get(0));
+                        // Main Logic
+                        String decryptedString = ServiceUtil.md5DecryptExecutor.serve(params.get(ServerUtil.FIELD_NAME).get(0));
                         contentBuf.append(decryptedString);
                     }
                 }
