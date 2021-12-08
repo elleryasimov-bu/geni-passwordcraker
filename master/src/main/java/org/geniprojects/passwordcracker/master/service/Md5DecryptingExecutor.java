@@ -18,7 +18,7 @@ public class Md5DecryptingExecutor {
         this.workerPool = workerPool;
     }
 
-    public String assign(String encryptedString) {
+    public String assign(String encryptedString) throws Exception {
         int majorId = seqNum.incrementAndGet();
         queueCatalog.put(majorId, new LinkedBlockingQueue<String>());
 
