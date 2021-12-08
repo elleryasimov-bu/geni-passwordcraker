@@ -43,10 +43,9 @@ public class WorkerLogic {
 //            input.close();
 //            output.close();
             //socket.close();
-        }
-        catch(IOException e)
-        {
-            //System.out.println(i);
+
+            
+        } catch(Exception e) {
             e.printStackTrace();
         }
     }
