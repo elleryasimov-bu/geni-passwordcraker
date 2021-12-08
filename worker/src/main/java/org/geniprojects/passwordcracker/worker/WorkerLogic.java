@@ -12,10 +12,14 @@ import java.security.NoSuchAlgorithmException;
 
 public class WorkerLogic {
     public static void main(String[] args) {
+        int port = 50000;
+        if (args.length > 0) {
+            port = Integer.parseInt(args[0]);
+        }
         System.out.println("This is the worker.");
         try
         {
-            ServerSocket server = new ServerSocket(50000);
+            ServerSocket server = new ServerSocket(port);
             System.out.println("Server started");
 
             System.out.println("Waiting for a client ...");
