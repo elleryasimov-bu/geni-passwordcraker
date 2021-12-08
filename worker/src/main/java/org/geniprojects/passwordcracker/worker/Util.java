@@ -2,6 +2,7 @@ package org.geniprojects.passwordcracker.worker;
 
 import com.esotericsoftware.kryo.Kryo;
 
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -15,4 +16,6 @@ public class Util {
         return kryo;
     }
     public static final ExecutorService connThreadPool = Executors.newCachedThreadPool();
+
+    public static final ConcurrentHashMap<String, String> md5Map = new ConcurrentHashMap<>();
 }
