@@ -4,6 +4,21 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="styles.css">
     <title>Password Cracker</title>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
+    </script>
+    <script type="application/javascript">
+        $(document).ready(function(){
+            $("form").submit(function(event){
+                event.preventDefault();
+                //alert("Executed:" + $(this).serialize());
+                $.get("?" + $(this).serialize(), function(data, status){
+                    //alert("Data: " + data + "\nStatus: " + status);
+                    console.log(data);
+                    $("#result").html(data);
+                });
+            });
+        });
+    </script>
 </head>
 <body>
     <div class="header" >
@@ -11,7 +26,7 @@
         <h1>Password Cracker</h1>
     </div>
     <br>
-    <form action="" method="GET">
+    <form id="theform" action="" method="GET">
         <div class="form-control">
             <label for="input">
                 Input
@@ -22,7 +37,7 @@
         <div class="form-control">
             <label>
                 Result
-                <output name="result" for="input" > </output>
+                <div id = "result"></div>
             </label>
         </div>
         <div>

@@ -51,6 +51,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<Object> {
                 URI uriFromRequest = URI.create(request.uri());
                 if (uriFromRequest.getQuery() == null) {
                     contentType = "text/html";
+                    if (uriFromRequest.getPath().toString().contains("css")) contentType ="text/css";
                     if (uriFromRequest.getPath() == null || uriFromRequest.getPath().equals("/") || uriFromRequest.getPath().equals("") || uriFromRequest.getPath().equals(ServerUtil.DEFAULT_PAGE_URL)) {
                         String htmlText = ResourceRetriever.retrieveResourceText(ServerUtil.DEFAULT_PAGE_URL);
                         contentBuf.append(htmlText);
