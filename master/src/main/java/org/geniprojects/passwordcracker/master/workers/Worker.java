@@ -1,5 +1,6 @@
 package org.geniprojects.passwordcracker.master.workers;
 
+import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import org.geniprojects.passwordcracker.master.server.ServerUtil;
@@ -24,6 +25,8 @@ public class Worker {
     public AtomicBoolean availability = new AtomicBoolean();
     private Worker previousWorker;
     private Thread receivingThread;
+    private Kryo serializer = ConnectionUtil.initSerializer();
+    private Kryo inputSerializer = ConnectionUtil.initSerializer();
     //private Output output;
     //private Input input;
 
@@ -39,14 +42,14 @@ public class Worker {
 
         Output output = new Output(socket.getOutputStream());
         System.out.println("Going to write");
-        ConnectionUtil.serializer.writeObject(output, req);
+        serializer.writeObject(output, req);
         System.out.println("Going to send " + req.enCryptedString);
         output.flush();
         System.out.println("Write Successfully");
 
         System.out.println("Waiting for input");
         Input input = new Input(socket.getInputStream());
-        Response resp = ConnectionUtil.serializer.readObject(input, Response.class);
+        Response resp = serializer.readObject(input, Response.class);
         System.out.println("Response received");
 
 
@@ -69,7 +72,7 @@ public class Worker {
 
             Output output = new Output(socket.getOutputStream());
             System.out.println("Going to write");
-            ConnectionUtil.serializer.writeObject(output, req);
+            serializer.writeObject(output, req);
             System.out.println("Going to send " + req.enCryptedString);
             output.flush();
             //output.close();
@@ -88,7 +91,7 @@ public class Worker {
             //input = new Input(socket.getInputStream());
             while (true) {
                 Input input = new Input(socket.getInputStream());
-                Response resp = ConnectionUtil.inputSerializer.readObject(input, Response.class);
+                Response resp = inputSerializer.readObject(input, Response.class);
                 //input.close();
                 System.out.println("Response received: " + resp.id);
                 // Fix: Not thread-safe.
