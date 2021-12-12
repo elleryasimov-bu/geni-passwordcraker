@@ -7,8 +7,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Util {
-    public static final Kryo serializer = initSerializer();
-    private static Kryo initSerializer() {
+    //public static final Kryo serializer = initSerializer();
+    public static Kryo initSerializer() {
         Kryo kryo = new Kryo();
         kryo.register(Request.class);
         kryo.register(Response.class);
@@ -16,6 +16,7 @@ public class Util {
         return kryo;
     }
     public static final ExecutorService connThreadPool = Executors.newCachedThreadPool();
+    public static final ExecutorService computingThreadPool = Executors.newCachedThreadPool();
 
     public static final ConcurrentHashMap<String, String> md5Map = new ConcurrentHashMap<>();
 }

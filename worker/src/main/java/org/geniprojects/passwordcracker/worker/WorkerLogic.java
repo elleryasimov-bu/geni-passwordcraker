@@ -25,7 +25,9 @@ public class WorkerLogic {
             System.out.println("Waiting for a client ...");
 
             Socket socket = server.accept();
-            Util.connThreadPool.submit(new PerConnection(socket));
+            PerConnection newConn = new PerConnection(socket);
+            Util.connThreadPool.submit(newConn::receive);
+            Util.connThreadPool.submit(newConn::response);
             System.out.println("Client accepted");
 
 //            // takes input from the client socket
@@ -70,7 +72,7 @@ public class WorkerLogic {
                             testpsw.append(c5);
                             md.update(testpsw.toString().getBytes());
                             String hash = new BigInteger(1, md.digest()).toString(16);
-                            if (testpsw.toString().equals("AAAAB")) System.out.println(hash);
+                            Util.md5Map.put(hash, testpsw.toString());
                             if (input.equals(hash)) {
                                 return testpsw.toString();
                             }

@@ -14,8 +14,11 @@ import org.geniprojects.passwordcracker.master.workers.management.WorkerPool;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.ReentrantLock;
 
+// Actor Worker
 public class Worker {
     private String ipAddress;
     private int port;
@@ -27,6 +30,10 @@ public class Worker {
     private Thread receivingThread;
     private Kryo serializer = ConnectionUtil.initSerializer();
     private Kryo inputSerializer = ConnectionUtil.initSerializer();
+    // Actor model worker
+    private BlockingQueue<Request> mailbox  = new LinkedBlockingQueue<>();
+    private boolean threadInitiated;
+    private ReentrantLock threadCreationLock = new ReentrantLock();
     //private Output output;
     //private Input input;
 
@@ -59,23 +66,43 @@ public class Worker {
         return resp;
     }
 
-    public synchronized boolean asyncAssign(Request req){
-        //if (!availability.get()) return false;
-        try {
+    // Init if uninitialized.
+    public void initWorkerSocketAndThreads() throws Exception{
+        threadCreationLock.lock();
+        if (!threadInitiated) {
             if (socket == null) {
                 socket = new Socket(ipAddress, port);
                 //output = new Output(socket.getOutputStream());
                 //input = new Input(socket.getInputStream());
-                ManagementUtil.backgroundThreadPool.submit(this::runReceiver);
                 availability.set(true);
             }
+            ManagementUtil.backgroundThreadPool.submit(this::runSender);
+            ManagementUtil.backgroundThreadPool.submit(this::runReceiver);
+        }
+        threadCreationLock.unlock();
+    }
 
+    public void runSender() {
+        try {
             Output output = new Output(socket.getOutputStream());
-            System.out.println("Going to write");
-            serializer.writeObject(output, req);
-            System.out.println("Going to send " + req.enCryptedString);
-            output.flush();
+            while (true) {
+                Request req = mailbox.take();
+                System.out.println("Going to write");
+                serializer.writeObject(output, req);
+                System.out.println("Going to send " + req.enCryptedString);
+                output.flush();
+            }
             //output.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean asyncAssign(Request req){
+        //if (!availability.get()) return false;
+        try {
+            initWorkerSocketAndThreads();
+            mailbox.add(req);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
